@@ -25,8 +25,7 @@ public class WikimediaChangesProducer {
 
     public static void main(String[] args) {
         String bootstrapServers = "127.0.0.1:9092";
-        String topic = "wikimedia.recentChanges";
-        createNewTopic(topic, bootstrapServers);
+        //createNewTopic(Constants.TOPIC_NAME, bootstrapServers);
 
         // Create producer properties
         Properties properties = new Properties();
@@ -42,7 +41,7 @@ public class WikimediaChangesProducer {
 
         // Create the producer
         try (KafkaProducer<String, String> producer = new KafkaProducer<>(properties)) {
-            EventHandler eventHandler = new WikimediaChangeHandler(producer, topic);
+            EventHandler eventHandler = new WikimediaChangeHandler(producer, Constants.TOPIC_NAME);
             String url = "https://stream.wikimedia.org/v2/stream/recentchange";
             EventSource source = new EventSource.Builder(eventHandler, URI.create(url)).build();
             source.start();
